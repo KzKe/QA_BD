@@ -13,7 +13,7 @@ class config:
 
     EPOCHS = 3
 
-    TRAINING_FILE = '/content/drive/My Drive/dureader_robust-data/demo/demo_train.json'
+    TRAINING_FILE = '/content/drive/My Drive/dureader_robust-data/train.json'
     DEV_FILE = '/content/drive/My Drive/dureader_robust-data/dev.json'
     TEST_FILE = '/content/drive/My Drive/Baidu _Reading_Comprehension/dureader_robust-test1/test1.json'
     # ROBERTA_PATH = "../input/roberta-base"
