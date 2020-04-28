@@ -25,4 +25,4 @@ class config:
     # )
 
     Bert_name = 'bert-base-chinese'
-    TOKENIZER = BertTokenizer.from_pretrained(Bert_name)
+    TOKENIZER = BertTokenizer.from_pretrained(Bert_name, lowercase=False)
