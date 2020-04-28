@@ -17,4 +17,4 @@ class config:
     # )
 
     Bert_name = 'bert-base-chinese'
-    OKENIZER = BertTokenizer.from_pretrained(Bert_name)
+    TOKENIZER = BertTokenizer.from_pretrained(Bert_name)
