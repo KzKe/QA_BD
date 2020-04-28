@@ -67,9 +67,11 @@ def read_question_answer_examples(input_file, is_training=True, with_negative=Tr
                 qas_id = qa["id"]
                 question_text = qa["question"]
 
-                answer = qa["answers"][0]
-                answer_text = answer["text"]
-                assert answer_text != None 
+                if qa["answers"] not None:
+
+	                answer = qa["answers"][0]
+	                answer_text = answer["text"]
+                # assert answer_text != None 
                 start_position = answer["answer_start"]
 
                 example = InputExample(qas_id=qas_id, 
