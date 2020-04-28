@@ -20,7 +20,7 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 
 
-tokenizer = config.tokenizer
+tokenizer = config.TOKENIZER
 
 class InputExample(object):
     def __init__(self, 
@@ -88,16 +88,7 @@ def read_question_answer_examples(input_file, is_training=True, with_negative=Tr
 
 
 
-class QuestionAnswerProcessor(object):
-    # processor for the query-based ner dataset 
-    def get_train_examples(self, data_dir, filename):
-        return  read_question_answer_examples(os.path.join(data_dir, filename))
 
-    def get_dev_examples(self, data_dir, filename):
-        return read_query_ner_examples(os.path.join(data_dir, filename))
-
-    def get_test_examples(self, data_dir, filename):
-        return read_query_ner_examples(os.path.join(data_dir, filename))
 
 
 
@@ -203,18 +194,18 @@ def process_data(doc_text, query_text, orig_answer_text, tokenizer, max_len=512,
                         )
 
 
-def convert_examples_to_features(examples, tokenizer, max_seq_length=512):
-    features = []
-    for example in examples:
-      feature = process_data(
-          doc_text = example.context_text,
-          query_text = example.question_text,
-          orig_answer_text = example.answer_text,
-          tokenizer = tokenizer,
-          max_len=max_seq_length
-      )
-      features.append(feature)
-    return features 
+# def convert_examples_to_features(examples, tokenizer, max_seq_length=512):
+#     features = []
+#     for example in examples:
+#       feature = process_data(
+#           doc_text = example.context_text,
+#           query_text = example.question_text,
+#           orig_answer_text = example.answer_text,
+#           tokenizer = tokenizer,
+#           max_len=max_seq_length
+#       )
+#       features.append(feature)
+#     return features 
 
 
 
