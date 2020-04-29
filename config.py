@@ -3,6 +3,7 @@ from transformers import BertTokenizer
 
 class config:
     LEARNING_RATE = 4e-5
+    warmup_proportion = 
 
     MAX_LEN = 512
     QUESTION_MAXLEN = 100
@@ -32,8 +33,8 @@ class config:
 
     BERT_BASE = 'hfl/chinese-roberta-wwm-ext'
     BERT_LARGE = 'hfl/chinese-roberta-wwm-ext-large'
-    
-    TOKENIZER = BertTokenizer.from_pretrained(ROBERTA_BASE, lowercase=False)
+
+    TOKENIZER = BertTokenizer.from_pretrained(Bert_name, lowercase=False)
 
 
     

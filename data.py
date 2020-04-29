@@ -229,10 +229,10 @@ class Question_Answer_Dataset:
             'token_type_ids': torch.tensor(data.token_type_ids, dtype=torch.long),
             'start_position': torch.tensor(data.start_position, dtype=torch.long),
             'end_position': torch.tensor(data.end_position, dtype=torch.long),
-            'doc_text': data.doc_text,
-            'orig_answer_text': data.orig_answer_text,
-            'query_text': data.query_text,
-            'id': data.unique_id
+            # 'doc_text': data.doc_text,
+            # 'orig_answer_text': data.orig_answer_text,
+            # 'query_text': data.query_text,
+            # 'id': data.unique_id
         }
 
 
