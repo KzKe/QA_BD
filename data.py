@@ -215,11 +215,6 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length=512):
 
 class Question_Answer_Dataset:
     def __init__(self, features):
-        # self.tweet = tweet
-        # self.sentiment = sentiment
-        # self.selected_text = selected_text
-        # self.tokenizer = config.TOKENIZER
-        # self.max_len = config.MAX_LEN
         self.features = features
     
     def __len__(self):
@@ -238,7 +233,6 @@ class Question_Answer_Dataset:
             'orig_answer_text': data.orig_answer_text,
             'query_text': data.query_text,
             'id': data.unique_id
-            # 'offsets': torch.tensor(data["offsets"], dtype=torch.long)
         }
 
 

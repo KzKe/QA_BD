@@ -25,7 +25,7 @@ class config:
     # )
 
     Bert_name = 'bert-base-chinese'
-    TOKENIZER = BertTokenizer.from_pretrained(Bert_name, lowercase=False)
+    TOKENIZER = BertTokenizer.from_pretrained(ROBERTA_BASE, lowercase=False)
 
     ROBERTA_BASE = 'hfl/chinese-roberta-wwm-ext'
     ROBERTA_LARGE = 'hfl/chinese-roberta-wwm-ext-large'
