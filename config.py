@@ -10,6 +10,7 @@ class config:
 
     TRAIN_BATCH_SIZE = 32
     VALID_BATCH_SIZE = 32
+    hidden_size = 768
 
     EPOCHS = 3
 
@@ -25,13 +26,16 @@ class config:
     # )
 
     Bert_name = 'bert-base-chinese'
-    TOKENIZER = BertTokenizer.from_pretrained(ROBERTA_BASE, lowercase=False)
 
     ROBERTA_BASE = 'hfl/chinese-roberta-wwm-ext'
     ROBERTA_LARGE = 'hfl/chinese-roberta-wwm-ext-large'
 
     BERT_BASE = 'hfl/chinese-roberta-wwm-ext'
     BERT_LARGE = 'hfl/chinese-roberta-wwm-ext-large'
+    
+    TOKENIZER = BertTokenizer.from_pretrained(ROBERTA_BASE, lowercase=False)
+
+
     
 
 
