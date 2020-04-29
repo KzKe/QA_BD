@@ -3,7 +3,7 @@ from transformers import BertTokenizer
 
 class config:
     LEARNING_RATE = 4e-5
-    warmup_proportion = 
+    # warmup_proportion = 
 
     MAX_LEN = 512
     QUESTION_MAXLEN = 100
