@@ -1,7 +1,9 @@
+from config import config
+
 import transformers
 from transformers import BertTokenizer
 
-from config import config
+# from config import config
 
 import os 
 import csv 
@@ -46,6 +48,12 @@ class InputExample(object):
         self.answer_text = answer_text 
         self.start_position = start_position 
         self.end_position = end_position 
+    
+    def print_val(self):
+      print(self.qas_id)
+      print(self.context_text)
+      print(self.question_text)
+      print(self.answer_text)
 
 
 
@@ -67,12 +75,12 @@ def read_question_answer_examples(input_file, is_training=True, with_negative=Tr
                 qas_id = qa["id"]
                 question_text = qa["question"]
 
-                if qa["answers"] not None:
-
-	                answer = qa["answers"][0]
-	                answer_text = answer["text"]
-                # assert answer_text != None 
-                start_position = answer["answer_start"]
+                answer_text = None 
+                start_position = None 
+                if "answers" in qa.keys():
+                    answer = qa["answers"][0]
+                    answer_text = answer["text"]
+                    start_position = answer["answer_start"]
 
                 example = InputExample(qas_id=qas_id, 
                                       question_text=question_text, 
@@ -87,11 +95,6 @@ def read_question_answer_examples(input_file, is_training=True, with_negative=Tr
                 examples.append(example)
     print(len(examples))
     return examples
-
-
-
-
-
 
 
 class InputFeatures(object):
@@ -110,8 +113,8 @@ class InputFeatures(object):
                 start_position, 
                 end_position, 
                 doc_text,
-                orig_answer_text,
-                query_text
+                query_text,
+                orig_answer_text=None
                 ):
 
         self.unique_id = unique_id 
@@ -124,7 +127,6 @@ class InputFeatures(object):
         self.orig_answer_text=orig_answer_text,
         self.query_text=query_text
  
-
 
 def add_space(text):
   # add space for .com
@@ -140,14 +142,16 @@ def add_space(text):
   return text
 
 
-
 def process_data(doc_text, query_text, orig_answer_text, tokenizer, max_len=512, doc_max_len=400, query_max_len=100,unique_id=0):
-
+    # print(query_text)
     new_text = doc_text
-    doc_text = add_space(doc_text.lower())
+    doc_text = add_space(doc_text)
     doc_tokens = tokenizer.tokenize(doc_text)
-    answer_token = tokenizer.tokenize(add_space(orig_answer_text.lower()))
-    query_token = tokenizer.tokenize(query_text.lower())
+    if not orig_answer_text:
+      orig_answer_text = 'N'
+    answer_token = tokenizer.tokenize(add_space(orig_answer_text))
+
+    query_token = tokenizer.tokenize(query_text)
 
     idx0 = None
     idx1 = None
@@ -170,7 +174,7 @@ def process_data(doc_text, query_text, orig_answer_text, tokenizer, max_len=512,
     if idx0 is None or idx1 is None:
       start_position = -1 
       end_position = -1
-      print(orig_answer_text)
+      # print(orig_answer_text)
     else:
       start_position = idx0 + len(query_encoded['input_ids']) + 2
       end_position = idx1 + len(query_encoded['input_ids']) + 2
@@ -195,19 +199,48 @@ def process_data(doc_text, query_text, orig_answer_text, tokenizer, max_len=512,
                           query_text=query_text
                         )
 
+def convert_examples_to_features(examples, tokenizer, max_seq_length=512):
+    features = []
+    for example in examples:
+      feature = process_data(
+          doc_text = example.context_text,
+          query_text = example.question_text,
+          orig_answer_text = example.answer_text,
+          tokenizer = tokenizer,
+          max_len=max_seq_length
+      )
+      features.append(feature)
+    return features 
 
-# def convert_examples_to_features(examples, tokenizer, max_seq_length=512):
-#     features = []
-#     for example in examples:
-#       feature = process_data(
-#           doc_text = example.context_text,
-#           query_text = example.question_text,
-#           orig_answer_text = example.answer_text,
-#           tokenizer = tokenizer,
-#           max_len=max_seq_length
-#       )
-#       features.append(feature)
-#     return features 
+
+class Question_Answer_Dataset:
+    def __init__(self, features):
+        # self.tweet = tweet
+        # self.sentiment = sentiment
+        # self.selected_text = selected_text
+        # self.tokenizer = config.TOKENIZER
+        # self.max_len = config.MAX_LEN
+        self.features = features
+    
+    def __len__(self):
+        return len(self.features)
+
+    def __getitem__(self, item):
+        data = self.features[item]
+
+        return {
+            'input_ids': torch.tensor(data.input_ids, dtype=torch.long),
+            'input_mask': torch.tensor(data.input_mask, dtype=torch.long),
+            'token_type_ids': torch.tensor(data.token_type_ids, dtype=torch.long),
+            'start_position': torch.tensor(data.start_position, dtype=torch.long),
+            'end_position': torch.tensor(data.end_position, dtype=torch.long),
+            'doc_text': data.doc_text,
+            'orig_answer_text': data.orig_answer_text,
+            'query_text': data.query_text,
+            'id': data.unique_id
+            # 'offsets': torch.tensor(data["offsets"], dtype=torch.long)
+        }
+
 
 
 
